@@ -1,13 +1,7 @@
-Share article: <a href="javascript:window.open('mailto:?subject='+document.title+'&amp;body='+encodeURIComponent(document.querySelector('meta[name=description]').content)+'%20'+encodeURIComponent(window.location.href));">Send Email</a> | <a onclick="copyToClipboard();" id="share-link">Copy Link</a>
+Share article: <a href="javascript:window.open('mailto:?subject='+document.title+'&amp;body='+encodeURIComponent(document.querySelector('meta[name=description]').content)+'%20'+encodeURIComponent(window.location.href));">Send Email</a> | <a onclick="copyShareLink();" id="share-link">Copy Link</a>
 
 <style>
-  #share-link:hover, #code-copy:hover {
-    cursor: pointer;
-  }
-  #share-link.clicked, #code-copy.clicked {
-    color: #444;
-  }
-  #share-link.clicked:hover, #code-copy.clicked:hover {
+  #share-link.clicked:hover {
     cursor: default;
   }
 </style>
@@ -15,29 +9,14 @@ Share article: <a href="javascript:window.open('mailto:?subject='+document.title
 <script>
 /* Copy share link */
 
-function copyToClipboard(text) {
-  var inputfield = document.body.appendChild(document.createElement("input"));
-  var copyTimeout = setTimeout(copyToClipboardReset, 2500);
+async function copyShareLink() {
+  let text = window.location.href;
 
-  /* Set clipboard value */
-  inputfield.value = window.location.href;
+  await navigator.clipboard.writeText(text);
+  document.querySelector('#share-link').innerText = "Copied";
 
-  /* Copy to clipboard */
-  inputfield.focus();
-  inputfield.select();
-  document.execCommand('copy');
-
-  /* Remove temporary field */
-  inputfield.parentNode.removeChild(inputfield);
-
-  /* Note success */
-  document.getElementById('share-link').innerHTML = "Ready to paste!";
-  document.getElementById('share-link').classList.add("clicked");
-
-  /* Revert text */
-  function copyToClipboardReset() {
-    document.getElementById('share-link').innerHTML = "Copy link URL";
-    document.getElementById('share-link').classList.remove("clicked");
-  }
+  setTimeout(() => {
+    document.querySelector('#share-link').innerText = "Copy Link";
+  }, 1000);
 }
 </script>
